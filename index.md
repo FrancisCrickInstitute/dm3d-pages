@@ -4,7 +4,7 @@ This is a quick start guide to using our deformable plugin. The goal is to be ab
 
 Segmentations are saved as meshes. They can be used to generate movies or produce measurements of select values.
 
-- [Quick Start / Installation](#Quick Start)
+- [Quick Start / Installation](#quick-start)
 - Mesh Initialization
 - Deform Mesh to Image Energies
 - Tracking meshes
