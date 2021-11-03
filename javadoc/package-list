@@ -1,0 +1,17 @@
+
+deformablemesh
+deformablemesh.externalenergies
+deformablemesh.geometry
+deformablemesh.geometry.modifier
+deformablemesh.gui
+deformablemesh.gui.meshinitialization
+deformablemesh.gui.render2d
+deformablemesh.io
+deformablemesh.meshview
+deformablemesh.ringdetection
+deformablemesh.simulations
+deformablemesh.track
+deformablemesh.util
+deformablemesh.util.actions
+deformablemesh.util.astar
+deformablemesh.util.connectedcomponents
