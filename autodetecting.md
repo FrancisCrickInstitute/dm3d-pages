@@ -1,9 +1,9 @@
-#Auto detecting.
+# Auto detecting.
 
-This plugin has some limited autodetection and tracking routines. When autodetecting, a threshold is used and meshes are initialized based on the the threshold. 
+This plugin has some limited autodetection and tracking routines. When autodetecting, a threshold is used and meshes are initialized based on the threshold. 
 This docuemnt shows a couple workflows for detecting specific types of images.
 
-##Detecting bright nuclei 
+## Detecting bright nuclei 
 
 This simply done using a threshold.
 
@@ -15,8 +15,10 @@ Then using the javascript console run:
 
 That will detect meshes in all of the image using the provided threshold value.
 
-What will often happen is that across an image different thresholds are required. To address this issue we've used neural networks. [Active Unet Segmentation]() 
-uses distance transforms for training labels. 
+What will often happen is that across an image different thresholds are 
+required. To address this issue we've used neural networks. 
+[Active Unet Segmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation) 
+to train a neural network to detect a distance transform of the image. 
 
 Using the neural network to make a prediction, the prediction can be used to automatically segment the image. 
 
@@ -26,4 +28,8 @@ Using the neural network to make a prediction, the prediction can be used to aut
 - set the image energy to perpendicular intensity with a force of around -0.05. 
 - deform the mesh/refine.
 
-Tracking can be useful for finding errors.
+## Tracking
+
+The automatic tracking routine provided is very naive, but it can be useful 
+for finding errors in the detection, or finding cells that are ambiguous in one
+frame but discernible in another.

@@ -94,8 +94,12 @@ Mesh data is a set of N points, and assiociated connections and triangles. The d
 
 The javascript console exposes the full java api via java script. It has command completion and keeps track of history.
 
+[javascipt console](javascript-examples.html) has example usage, and links to the java API. 
+
 ## Control Panel
-  ### main
+
+### main
+
   All the parameters and buttons for main. Mostly used for deforming the mesh. Many of the commands are also available through the canvas window.
   ![main control panel](images/main-panel.png)
   From the top left and moving right:
@@ -116,16 +120,20 @@ The javascript console exposes the full java api via java script. It has command
   - max -+: adjust the maximum cutoff of volume contrast.
   - connection remesh: [remesh connections](#connection-remesh) of the currently selected mesh.
   The rest are deformation parameters.
-  ### furrow
+
+### furrow
   The name is outdated, but the control can still be usefull.
   ![furrow control panel](images/furrow-panel.png)
-  ### initializer
+
+### initializer
   These windows allow creating new meshes by adding spheres.
   ![mesh initializer panel](images/initializer-panel.png)
-  ### manager
+
+### manager
   Manage mesh tracks.
   ![manage tracks in time](images/manager-panel.png)
-  ### canvas
+
+### canvas
   3D view that many of the commands can be access through hot keys when the window is selected.
   ![3D volume view with help screen](images/3d-canvas.png)
 
