@@ -11,14 +11,27 @@ using the 'controls' object, and press tab and a selection of options will be sh
 ## The API
 
 The main entry point is the [SegmentationController](javadoc/deformablemesh/SegmentationController.html) object that handles 
-most of the data. All of the public methods are accessible.
+most of the data. All of the public methods are accessible. 
 
+## Detecting meshes automatically.
 
-## Changing the color scheme (>=0.36)
+    controls.guessMeshes(1);
+
+This will go through each image in the current volume and apply a threshold of 1.
+It will then do a 3D connected components to find candidate meshes. Then 
+meshes are initialized by racasting at each connected component.
+
+## Creating 3D training data.
+
+    controls.generateTrainingData( 0, 5 );
+    
+Creates a folder labels and a folder images 
+
+## Changing the color scheme 
 
 ```javascript
-mf = controls.getMeshFrame3D();
-mf.setBackgroundColor(Color.BLACK);
+mf3d = controls.getMeshFrame3D();
+mf3d.setBackgroundColor(Color.BLACK);
 controls.setVolumeColor(Color.GREEN);
 ```
 set it back.
@@ -27,6 +40,32 @@ set it back.
 mf.setBackgroundColor(Color.WHITE);
 controls.setVolumeColor(Color.BLUE);
 ```
+
+## Remove all tracks outside of a certain track range. **This modifies 
+tracks so it can clear an undo stack.**
+
+``` 
+function clearRemainingMeshes(first, last){
+    tracks = controls.getAllTracks();
+    tracks.removeIf( function(track){
+		fi = track.getFirstFrame();
+        li = track.getLastFrame();
+        return fi > last || li < first;
+    });
+    controls.setMeshTracks(tracks);
+    
+    tracks = controls.getAllTracks();
+    for(i = 0; i<tracks.size(); i++){
+        track = tracks.get(i);
+        for( j = track.getFirstFrame() ; j<=track.getLastFrame(); j++){
+            if(j < first || j > last){
+                controls.clearMeshFromTrack(track, j, track.getMesh(j));
+            }
+        }
+    }
+}
+```
+
 
 ## Surface Plots
 
@@ -38,6 +77,7 @@ sp = controls.intensitySurfacePlot();
 sp.processAndShow();
 
 ```
+
 
 We can set a clipping range, and change the colors used. We also can access the MeshFrame and  set the background color.
 

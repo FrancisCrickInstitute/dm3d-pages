@@ -33,3 +33,11 @@ Using the neural network to make a prediction, the prediction can be used to aut
 The automatic tracking routine provided is very naive, but it can be useful 
 for finding errors in the detection, or finding cells that are ambiguous in one
 frame but discernible in another.
+
+To start a completely new tracking
+
+    controls.autoTrackFromScratch()
+
+To only track cells that are not part of any track.
+    
+    controls.trackAvailableTracks()

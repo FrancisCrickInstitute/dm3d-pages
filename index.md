@@ -90,6 +90,8 @@ For example. I will open an image and select the membrane channel. Then I will s
 
 Mesh data is a set of N points, and assiociated connections and triangles. The data can be written and loaded by the mesh plugin, or by using a small python library.
 
+[binarymeshformat](binarymeshformat.html) demonstrates how to use the python library.
+
 ## Javascript console
 
 The javascript console exposes the full java api via java script. It has command completion and keeps track of history.
@@ -121,9 +123,6 @@ The javascript console exposes the full java api via java script. It has command
   - connection remesh: [remesh connections](#connection-remesh) of the currently selected mesh.
   The rest are deformation parameters.
 
-### furrow
-  The name is outdated, but the control can still be usefull.
-  ![furrow control panel](images/furrow-panel.png)
 
 ### initializer
   These windows allow creating new meshes by adding spheres.
@@ -135,6 +134,7 @@ The javascript console exposes the full java api via java script. It has command
 
 ### canvas
   3D view that many of the commands can be access through hot keys when the window is selected.
+  Press `h` to see available commands.
   ![3D volume view with help screen](images/3d-canvas.png)
 
 ## Trouble shooting
