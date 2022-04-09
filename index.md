@@ -141,7 +141,7 @@ The javascript console exposes the full java api via java script. It has command
 
 ### generate-labels
 
-    An effective way to segment images using our plugin is by creating training labels from an existing set of segmentations.
+  An effective way to segment images using our plugin is by creating training labels from an existing set of segmentations.
     
 ```javascript
     generateTrainingLabels( startFrame, endFrame);    
