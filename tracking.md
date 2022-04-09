@@ -1,4 +1,4 @@
-#Tracking Meshes
+# Tracking Meshes
 
 The plugin provides some functionality for tracking meshes.
 
@@ -29,7 +29,7 @@ If it is a missed detection, I select the disappearing track, go to the
 frame after it has disappeared and create a new track with the initializer.
 
 When two cells are fused. I might delete the double mesh and create two
-new meshes. Or I use the furrow and 
+new meshes. Or I center the furrow, and then use the "split mesh button"
 
 
 ## Coloring meshes.
@@ -82,4 +82,3 @@ track. Then click the button "to new track" and the mesh will be split.
 That will split the currently selected mesh track by moving all of the
 meshes after the current frame to a new mesh track.
 
-Color tracks based on some criteria. 

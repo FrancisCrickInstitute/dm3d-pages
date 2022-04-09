@@ -19,6 +19,7 @@ Segmentations are saved as meshes. They can be used to generate movies or produc
   - furrow
   - initializer
   - manager
+- [Creating Labels to Train a Neural Network.](#generate-labels)
 - [Trouble shooting](#trouble-shooting)
 - [About](#about)
 
@@ -74,6 +75,7 @@ The "raycast remesh" remeshes the current mesh by finding the center of the mesh
 
 ## Tracking meshes
 
+[introduction to tracking](tracking.md)
 Tracking involves keeping track of a mesh on for multiple time frames. One use of tracking meshes is to initialize a mesh on subsequent frames. 
 
 When the "DM3D: canvas" windows selected, pressing "t" will track the mesh to the next frame.
@@ -137,7 +139,34 @@ The javascript console exposes the full java api via java script. It has command
   Press `h` to see available commands.
   ![3D volume view with help screen](images/3d-canvas.png)
 
+### generate-labels
+
+    An effective way to segment images using our plugin is by creating training labels from an existing set of segmentations.
+    
+```javascript
+    generateTrainingLabels( startFrame, endFrame);    
+```
+  That will prompt the user for a folder. Once you select a folder it will
+  create two folders, "images" and "labels". "images" will contain single time
+  point volumes from the currently selected image.
+  "labels" will create a single channel volume that contains 3 labels in it.
+  
+  The first bit is a mask of all the meshes. The second bit is represents
+  the mesh surface, and the last 6 bits represent the distance transform
+  up to 32 pixels before it saturates.
+  
+  This training data can be used with our  [3D Unet implementation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation)
+
 ## Trouble shooting
+
+  Sometimes the volume will not display properly when a screenshot is taken.
+  One thing that might help is to run the following from javascript console.
+  
+```javascript
+
+    restartOffscreenCanvas();
+
+```
 
 ## About
 

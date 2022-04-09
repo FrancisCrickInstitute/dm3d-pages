@@ -1,5 +1,6 @@
 
 deformablemesh
+deformablemesh.examples
 deformablemesh.externalenergies
 deformablemesh.geometry
 deformablemesh.geometry.modifier
