@@ -63,6 +63,25 @@ This is primariy for manual segmenting cells with small displacements and
 shape changes. The intent is to be able to initialize a mesh from the
 previous frame.
 
+### Linking two meshes in successive frames. 
+
+If two tracks are able to be linked and they have sufficient overlap 
+in sucessive frames they can be linked by going to the frame of the
+first mesh to be linked and pressing `l`. It will check for an available 
+mesh in the next frame and link them. This can also be performed from
+the javascript console with.
+
+    controls.linkPossibleTrack();
+
+### Autolinking all meshes in a frame.
+
+To attempt to link all available meshes in on frame in the next frame. 
+
+    controls.autotrackAllAvailable();
+    
+This will attempt to link any track in the current frame with another
+
+
 ## Mesh Track Manager
 
 The track manager is a way to find errors, and modify tracks. 

@@ -37,7 +37,7 @@ controls.setVolumeColor(Color.GREEN);
 set it back.
 
 ```javascript
-mf.setBackgroundColor(Color.WHITE);
+mf3d.setBackgroundColor(Color.WHITE);
 controls.setVolumeColor(Color.BLUE);
 ```
 
@@ -167,4 +167,43 @@ plus = new ImagePlus();
 plus.setStack(stack);
 plus.show();
 ```
+## Find and select a mesh based on volume.
 
+Finds the first mesh with a volume less than a threshold value.
+
+```javascript
+stopping = false;
+tracks = controls.getAllTracks();
+threshold = 0;
+for( key in tracks){
+    track = tracks[key];
+    map = track.getTrack();
+    for( frame in map){
+        mesh = track.getMesh( frame );
+        if( mesh.calculateVolume() < threshold){
+            controls.toFrame(frame);
+             controls.selectMesh(mesh);
+             stopping = true;
+             break;
+        }
+    }
+    if(stopping){
+         break;
+    }
+}
+
+if(stopping){
+    echo("found small mesh!");
+}	
+```
+
+Goes through each frame and auto tracks any unlinked meshes. Autotracking
+tries to link any tracks that do not exist in the current frame, but
+do exist in the next frame. 
+
+```javascript
+for( i = 0; i<controls.getNFrames() - 1; i++){
+  controls.toFrame(i);
+  controls.autotrackAvailableTracks();
+  }
+```
