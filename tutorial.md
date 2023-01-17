@@ -5,8 +5,10 @@ to segment and track the meshes. It assumes that you have installed
 the dm3d into fiji, if not check 
 
 ## Open a file
+The example data is a zip file containing three images available 
+here [tutorial-data.zip](https://zenodo.org/record/7544194/files/tutorial-data.zip?download=1)
 
-Start fiji and open the provided image file: "tile_3-example.tif". Once 
+Start fiji and open the provided image file: "tile_3-sample.tif". Once 
 the image has loaded you can start the DM3D plugin from the plugin
 menu. After which the DM3D interface will start and a dialog will come 
 asking you to select a  channel. Select channel 1.
@@ -63,7 +65,11 @@ Click deform. The shape will quickly settle to a shape that should
 capture the membrane well. Click stop! The deformation does not stop
 automatically.
 
-Click "connection remesh". That will redo the mesh so that the triangles 
+After deforming it is good to remesh to improve the triangle distribution.
+Below "connection remesh" button there are two values. Set the min 
+lenth to 0.01 and the max length to 0.02.
+
+Then click the "connection remesh" button. That will redo the mesh so that the triangles 
 are more uniform. Then click deform and when the mesh stops deforming
 click stop again.
 
@@ -89,13 +95,119 @@ Selected the "Max Gradient" energy, and **adjust the image weight**.
 - image weight: 0.0001
 - beta: 0.1
 
-Then click deform mesh.
-
-### Automatically detecting nuclei.
+Then click deform mesh. This should deform to the nuclei. Again use
+the "remesh connections" button, and "deform" again to refine the shape
+of the mesh until it is not improving any more.
 
 ## Using the distance transform.
 
+### Automatically detecting nuclei.
 
+First open the image provided in the tutorial dataset, 
+"pred-dna-350nm-tile_3-sample.tif".and select channel 3. That is 
+the distance transform. Go to the file menu and select "restart meshes"
+
+To detect nuclei, go to the "tools" menu and start the javascript console.
+Type in the command.
+
+    controls.guessMeshes( 3 );
+
+Then click the button "eval".
+
+The value "3" is a threshold value. A small number will predict larger
+meshes, but sometimes they can be merged. A large number will predict
+smaller meshes. On the control panel, clicking on the histogram 
+can help to show how well the threshold value works.
+
+### Deforming meshes to the distance transform.
+
+To deform to the distance tranform select a "Max Intensity" and 
+set the image weight to a negative number. 
+
+- gamma: 500
+- alpha: 1.0
+- pressure: 0
+- steric neighbors: 0
+- image weight: -0.1
+- beta: 0.1
+
+Then deform all meshes by holding down Control and clicking deform. After
+the meshes have deformed and stopped changing significantly, click on 
+"stop!".
+
+That will refine the shapes, to further improve the meshes. Hold down
+control and click "connection remesh" and click deform again. 
+
+### Processing all frames
+
+To process all 6 frames past the following javascript script.
+
+    for( i = 0; i<6; i++){
+        controls.toFrame(i);
+        controls.guessMeshes(3);
+        controls.deformAllMeshes(100);
+        controls.reMeshConnectionsAllMeshes(0.01, 0.02);
+        controls.deformAllMeshes(100);
+    }
+    
+Click eval. That will go through all 10 frames, guess the meshes, and 
+deform them.
+
+**This will process the first frame but it shouldn't create any new meshes.**
+
+
+## Tracking meshes
+
+### Autotrack available meshes.
+
+In the "tools" menu select "Manage Tracks". That will start a new tab
+to manage the tracks. Tracks can be linked automatically. In the 
+javascript console run.
+
+    controls.toFrame(0);
+    controls.autotrackAvailableTracks();
+
+This can be run from any frame and it tries to find meshes in the next frame.
+
+To do all of the frames.
+
+    for(i = 0; i<5; i++){
+        controls.toFrame(i);
+        controls.autoTrackAvailableTracks();
+    }
+
+This successfully tracks all of the meshes in this example.
+
+## Creating membrane meshes from DNA meshes.
+
+Once the nuclear meshes are tracked. Open the image. 
+"pred-membrane-350nm-tile_3-sample.tif" and select channel 3 again.
+
+This involves the same method for the dna but we're starting from 
+the dna meshes and deforming them to the distance transform.
+
+- gamma: 500
+- alpha: 1.0
+- pressure: 0
+- steric neighbors: 0
+- image weight: -0.1
+- beta: 0.1
+
+Then hold control and click "deform". After meshes have slowed down, 
+click "stop!" and "connection remesh" and start deforming again.
+
+Since this is iterative, I script it. Then go through and find problems.
+
+    for( i = 0; i<6; i++){
+        controls.toFrame(i);
+        controls.deformAllMeshes(100);
+        controls.reMeshConnectionsAllMeshes(0.01, 0.02);
+        controls.deformAllMeshes(100);
+        controls.reMeshConnectionsAllMeshes(0.01, 0.02);
+        controls.deformAllMeshes(100);
+        controls.reMeshConnectionsAllMeshes(0.01, 0.02);
+        controls.deformAllMeshes(100);
+    }
 
 ### Notes
 
@@ -104,11 +216,6 @@ is initialized I click deform. Then depending on how the mesh deforms
 I adjust some parameters and try to get it to deform better.
 
 If the mesh deforms very poorly I use undo.
-
-
-
-
-
 
 ## Supplement
 
