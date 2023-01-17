@@ -1,6 +1,6 @@
 # Deformable Mesh 3D
 
-This is a quick start guide to using our deformable plugin. The goal is to be able to segment 3D timeplapse microscopy movies. Our plugin is an interactive semi-automated technique, where you initialize a mesh then use the image to improve the segmentation.
+This is a quick start guide to using our [deformable plugin, DM3D](https://github.com/PaluchLabUCL/DeformingMesh3D-plugin). The goal is to be able to segment 3D timeplapse microscopy movies. Our plugin is an interactive semi-automated technique, where you initialize a mesh then use the image to improve the segmentation.
 
 ![Example of a segmented organoid colony.](images/rotating-snapshot.gif)
 
