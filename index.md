@@ -7,6 +7,7 @@ This is a quick start guide to using our deformable plugin. The goal is to be ab
 Segmentations are saved as meshes. They can be used to generate movies or produce measurements of select values.
 
 - [Quick Start / Installation](#quick-start)
+- [Tutorial](#tutorial)
 - [Mesh Initialization](#mesh-initialization)
 - [Deform Mesh to Image Energies](#deform-mesh-to-image-energy)
 - [Remeshing](#remeshing)
@@ -19,9 +20,11 @@ Segmentations are saved as meshes. They can be used to generate movies or produc
   - furrow
   - initializer
   - manager
+- [3D Canvas]
 - [Creating Labels to Train a Neural Network.](#generate-labels)
 - [Trouble shooting](#trouble-shooting)
 - [About](#about)
+
 
 ## Quick Start
 
@@ -33,6 +36,10 @@ Once the plugin has been added, it will be in the menu *plugins->PL_Mesh3D->Defo
 
 While it is good practice to have the correct pixel units in your image properties. For this plugin to work properly it is important that the x-y
 are correct relative to the z units.
+
+## Tutorial
+
+We've made a [tutorial](tutorial.md) with example data provided. 
 
 ## Mesh Initialization
 
@@ -92,13 +99,13 @@ For example. I will open an image and select the membrane channel. Then I will s
 
 Mesh data is a set of N points, and assiociated connections and triangles. The data can be written and loaded by the mesh plugin, or by using a small python library.
 
-[binarymeshformat](binarymeshformat.html) demonstrates how to use the python library.
+[binarymeshformat](binarymeshformat.md) demonstrates how to use the python library.
 
 ## Javascript console
 
 The javascript console exposes the full java api via java script. It has command completion and keeps track of history.
 
-[javascipt console](javascript-examples.html) has example usage, and links to the java API. 
+[javascipt console](javascript-examples.md) has example usage, and links to the java API. 
 
 ## Control Panel
 
@@ -134,7 +141,7 @@ The javascript console exposes the full java api via java script. It has command
   Manage mesh tracks.
   ![manage tracks in time](images/manager-panel.png)
 
-### canvas
+## 3D Canvas
   3D view that many of the commands can be access through hot keys when the window is selected.
   Press `h` to see available commands.
   ![3D volume view with help screen](images/3d-canvas.png)
