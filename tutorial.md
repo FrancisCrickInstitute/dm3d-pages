@@ -13,10 +13,22 @@ the image has loaded you can start the DM3D plugin from the plugin
 menu. After which the DM3D interface will start and a dialog will come 
 asking you to select a  channel. Select channel 1.
 
+
 ## Segmenting the membrane. 
 
+
 After selecting the channel, the image is loaded. Nothing changes in
-the 3D canvas, but the name of the image should be displayed.
+the 3D canvas. On the main control panel, the name of the image should
+appear on the top right. The view on the left will show a cross section
+of the image, and a binarized version of the cross section to the 
+right.
+
+![default display](tutorial-images/starting.png)
+
+I resize the display and zoom in on the slice view.
+
+![display resized](tutorial-images/starting-resized.png)
+
 
 ### Initialize meshes.
 
@@ -24,12 +36,18 @@ The goal is to add spheres until they represent the target cell enough
 to initialize a mesh that will deform to the original image data to
 produce an acceptable segmentation.
 
+
 To initialize a mesh click the button "initialize mesh..." this will
 open a new tab with three orthoganal views of the 3D image.
 
+![intializer default](tutorial-images/initializer-default.png)
+
 The white lines in the image indicate the position of the other two
 views. The slider to the right adjust the position of the view along 
-the third axis. 
+the third axis. I zoom by scrolling over the different views to see
+the images better.
+
+![initializer prepared](tutorial-images/initializer-prepared.png)
 
 Using the top left initializer, adjust the slider until the image has a 
 cell of interest in view preferably where the crossection is largets.
@@ -38,18 +56,27 @@ Click near the center of the cross section and a sphere will start to
 be added. Move the cursor to the edge of the cell and click again. That 
 will create a sphere which will be used to initialize a mesh.
 
+![one sphere](tutorial-images/one-sphere.png)
+
 Once the sphere has been created it can be modified with the two colored
 circles. Dragging the yellow circle will move the sphere and dragging the
 blue circle will change the radius.
 
-The figure shows the collection of spheres in the 3 views. For this 
-image and this cell, this is an adequate guess. Click add mesh and
+
+The figure shows the collection of spheres in the 3 views. 
+
+![collection of spheres](tutorial-images/many-spheres.png)
+
+For this image and this cell, this is an adequate guess. Click "add mesh" and
 the spheres will change into a new mesh.
+
+![rough mesh](tutorial-images/rough-mesh.png)
 
 ### Deform mesh.
 
 Go back to the main tab to prepare the interface for deforming the 
-initialized mesh to the image.
+initialized mesh to the image. (Do not close the initialization tab
+just select the main tab.)
 
 Select the "Max Intensity" image energy. This will attract meshes
 to bright regions. The parameters should be set as follows
@@ -61,6 +88,12 @@ to bright regions. The parameters should be set as follows
 - image weight: 0.01
 - beta: 0.1
 
+![prepared for deforming](tutorial-images/pre-deform.png)
+
+*I have made the surface of the mesh visible in the 3D canvas by pressing 'o', 
+and I have adjusted the position of the "furrow plane" with the controls
+on the right side of the panel.*
+
 Click deform. The shape will quickly settle to a shape that should
 capture the membrane well. Click stop! The deformation does not stop
 automatically.
@@ -69,9 +102,13 @@ After deforming it is good to remesh to improve the triangle distribution.
 Below "connection remesh" button there are two values. Set the min 
 lenth to 0.01 and the max length to 0.02.
 
-Then click the "connection remesh" button. That will redo the mesh so that the triangles 
+Click the "connection remesh" button. That will redo the mesh so that the triangles 
 are more uniform. Then click deform and when the mesh stops deforming
 click stop again.
+
+![finished deforming](tutorial-images/finished-deforming.png)
+
+*Applying a gaussian blur to thoriginal image can help deformations.*
 
 ## Segmenting a nucleus
 
@@ -84,6 +121,8 @@ open.
 Again add spheres to the create a representation of the desired shape,
 the dna shapes should be a bit easier to capture with spheres.
 
+![initializing dna](tutorial-images/initializing-dna.png)
+
 ### Deform the mesh
 
 Selected the "Max Gradient" energy, and **adjust the image weight**.
@@ -95,9 +134,16 @@ Selected the "Max Gradient" energy, and **adjust the image weight**.
 - image weight: 0.0001
 - beta: 0.1
 
+![prepared for dna deforming](tutorial-images/pred-deformm-dna.png)
+
 Then click deform mesh. This should deform to the nuclei. Again use
 the "remesh connections" button, and "deform" again to refine the shape
 of the mesh until it is not improving any more.
+
+![before after dna deformations](tutorial-images/deformed-dna.png)
+
+*The 3D canvas display has been updated by clicking the "show plane"
+button and checking the "textured" checkbox.*
 
 ## Using the distance transform.
 
@@ -114,6 +160,8 @@ Type in the command.
 
 Then click the button "eval".
 
+![after guessing dna from distance transform](tutorial-images/guessed-meshes.png)
+
 The value "3" is a threshold value. A small number will predict larger
 meshes, but sometimes they can be merged. A large number will predict
 smaller meshes. On the control panel, clicking on the histogram 
@@ -126,7 +174,7 @@ set the image weight to a negative number.
 
 - gamma: 500
 - alpha: 1.0
-- pressure: 0
+- pressure:  0
 - steric neighbors: 0
 - image weight: -0.1
 - beta: 0.1
@@ -137,6 +185,18 @@ the meshes have deformed and stopped changing significantly, click on
 
 That will refine the shapes, to further improve the meshes. Hold down
 control and click "connection remesh" and click deform again. 
+
+![deformed itnialized meshes](tutorial-images/guessed-deformed.png)
+
+The quality of the segmentations can be verified by using the initializer
+window. Sometimes the meshes will be out of sync with what is in 
+the initializer window and it can be helpful to run. To uncheck and
+then check the "show meshes" checkbox.
+
+![initializer view](tutorial-images/initializer-view-dna.png)
+
+*The distance transform tends to make meshes a little large, which is
+good for subsequently deforming the meshes to the original data.*
 
 ### Processing all frames
 
@@ -150,7 +210,7 @@ To process all 6 frames past the following javascript script.
         controls.deformAllMeshes(100);
     }
     
-Click eval. That will go through all 10 frames, guess the meshes, and 
+Click eval. That will go through all 6 frames, guess the meshes, and 
 deform them.
 
 **This will process the first frame but it shouldn't create any new meshes.**
@@ -173,10 +233,12 @@ To do all of the frames.
 
     for(i = 0; i<5; i++){
         controls.toFrame(i);
-        controls.autoTrackAvailableTracks();
+        controls.autotrackAvailableTracks();
     }
 
 This successfully tracks all of the meshes in this example.
+
+![track manager after linking tracks](tutorial-images/linked-tracks.png)
 
 ## Creating membrane meshes from DNA meshes.
 
@@ -209,13 +271,17 @@ Since this is iterative, I script it. Then go through and find problems.
         controls.deformAllMeshes(100);
     }
 
-### Notes
+![montage of dna and membrane meshes](tutorial-images/dna-membrane-meshes.png)
 
-These parameters were found by guessing and checking. Once the mesh
-is initialized I click deform. Then depending on how the mesh deforms
-I adjust some parameters and try to get it to deform better.
+Here is a comparison of the DNA meshes and the meshes after deforming to
+the membrane distance transform.
 
-If the mesh deforms very poorly I use undo.
+The montage was created using tools->record snapshots then using imagej.
+
+It is important to use the original data for verifying the quality of the
+meshes. That is why it is convenient to have multiple initialization 
+tabs open.
+
 
 ## Supplement
 
@@ -228,7 +294,7 @@ If the mesh deforms very poorly I use undo.
 - Double click on the URL field and change it to: https://sites.imagej.net/Odinsbane/
 - Update Fiji
 
-### Poorly deforming meshes.
+### Imrpoving deforming meshes.
 
 When meshes deform poorly.
 
@@ -237,8 +303,18 @@ When meshes deform poorly.
 - filter the original image.
 - Manually edit mesh.
 
+### Notes
+
+These parameters were found by guessing and checking. Once the mesh
+is initialized I click deform. Then depending on how the mesh deforms
+I adjust some parameters and try to get it to deform better.
+
+If the mesh deforms very poorly I use undo.
+
+
 ### Troubleshooting
 
-- Q: I cannot add spheres.
+- Q: Initialization window seems frozen. Cannot add spheres or see meshes.
 - A: Is the UI blocked on some task, like a deforming mesh or changing
-a parameter?
+a parameter? Check the main control tab.
+
