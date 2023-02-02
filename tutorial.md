@@ -305,7 +305,7 @@ changes. Or click "cancel" if you don't like the results.
 You can also view/edit in 3D, click "show plane" button and check the 
 "show textured box.
 
-![editing a mesh from 3d view](images/scuplting-3d.png)
+![editing a mesh from 3d view](images/sculpting-3d.png)
 
 Spheres will indicate the mesh is moving, but the changes won't appear
 until the mouse is released.
