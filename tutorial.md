@@ -282,6 +282,127 @@ It is important to use the original data for verifying the quality of the
 meshes. That is why it is convenient to have multiple initialization 
 tabs open.
 
+## Manually Scuplting a Mesh.
+
+Sometimes a mesh isn't deforming to the shape you want. Maybe it is 
+stuck on something, maybe there is an artifact. This is a way to
+modify the mesh manually.
+
+Select the mesh you want sculpt. Click on the "select" button. That 
+activates the mesh modifier. Then click on "sculpt" that starts scuplt
+mode. Move the mouse over the slice view and a circle (sphere) will move
+around. By clicking and dragging the circle to intersect nodes of the mesh
+they will be moved around. "scuplted" if you will.
+
+![editing a mesh from 2d plane view](images/sculpting-2d.png)
+
+The yellow version of the mesh is the updated mesh, and the white version
+is the old mesh.
+
+When the mesh has been deformed sufficient click "finish" to accept the 
+changes. Or click "cancel" if you don't like the results.
+
+You can also view/edit in 3D, click "show plane" button and check the 
+"show textured box.
+
+![editing a mesh from 3d view](images/scuplting-3d.png)
+
+Spheres will indicate the mesh is moving, but the changes won't appear
+until the mouse is released.
+
+#### Caveats
+
+- Only nodes are sculpted, not lines or triangles so the results may vary.
+- When the mouse is pressed, any nodes within the sphere will not be moved.
+  Only nodes that start outside.
+- When "select" is pressed you can restrict the nodes that will be
+  modified by moving the sphere over them and clicking. Clicking more
+  will accumulate more selected nodes. Only the selected nodes can 
+  subsequently be modified.
+- Only the shape created with "finish" is part of the undo stack. 
+
+## Training a neural network.
+
+**Requires a cuda enabled graphics card.**
+To run the neural network, [ActiveUnetSegmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation) needs to be installed.
+
+Once we have a set of meshes that look good we can create training data 
+and train a model.
+
+Create a folder somewhere, and save the file [example-d3.json](example-d3.json)
+to the folder. **the name matters**.
+
+### Create training data
+
+First select the image that you want to be your input image. In the
+menu "file", "select open image" and choose "tile_3-sample.tif".
+
+It will use the original ImagePlus to derive the
+input training data. In our case it is 2 channel volume data. Run 
+the following function in the javascript console.
+
+    controls.generateTrainingData(0, 5);
+    
+Then select the training folder that the config file was saved in. Two 
+additional folder will be created with the "images", "labels". Inside 
+of the folders there will be six tif files. One for each time point.
+
+### Create a model
+
+Next we need to create the model. Activate a python environment with
+[ActiveUnetSegmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation)
+installed.
+
+    cerberus create -c example-d3.json
+    
+There will be a lot of options, but the .json is already setup for
+this specific dataset. So just clicking ok all of the menus the program
+should finish, and there will now be a "example-d3.h5".
+
+    cerberus train -c example-d3.json
+    
+There will be some options, but they should be set already for the 
+specific model/dataset to work.
+
+As the training runs, a file "batch-log_example-d3-123456789ab.txt" will be
+created. It gets updated at the end of each batch for the first 5000 
+batches. A file "training-log_example-d3-0123456789ab.txt" will be created 
+at the start of training, and updated at end of each epoch. 
+
+When an epoch finishes a new file "example-d3-latest.h5" will be created
+
+### Continuing Training
+
+To restart or continue training from a save model, name the model the
+same as the .json file. with .h5 instead.
+
+    mv example-3-latest.h5 example-d3.h5
+    
+That will overwrite the previous example-3.h5, and then 
+
+    cerberus train -c example-d3.json 
+
+Will start training from the previously trained model.
+
+### Making a prediction
+
+To make a prediction
+
+    cerberus predict example-3-latest.h5 tile_3-sample.tif
+
+I use the default options and the output, pred-example-3-latest-tile_3-sample.tif, 
+looks decent after a couple of epochs. 
+
+*Making a prediction from the training data doesn't show the quality of
+the model, it is more a demonstration that things are working.*
+
+### Additional Models
+
+We have published a dataset at Zenodo, [Mouse organoid dataset](https://zenodo.org/record/7544194) there
+are four models there that we have used. They all use [dna-350nm.json](dna-350nm.json)
+as a config file. The main difference between the four models is the
+data they have been trained on.
+
 
 ## Supplement
 
@@ -294,7 +415,7 @@ tabs open.
 - Double click on the URL field and change it to: https://sites.imagej.net/Odinsbane/
 - Update Fiji
 
-### Imrpoving deforming meshes.
+### Improving deforming meshes.
 
 When meshes deform poorly.
 

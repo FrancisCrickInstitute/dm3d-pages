@@ -1,0 +1,100 @@
+{
+  "unet": {
+    "input shape": [
+      2,
+      64,
+      64,
+      64
+    ],
+    "kernel shape": [
+      3,
+      3,
+      3
+    ],
+    "pooling": [
+      2,
+      2,
+      2
+    ],
+    "depth": 3,
+    "n filters": 32,
+    "condenser": [
+      1,
+      1,
+      1
+    ],
+    "spatial dropout rate": 0.0625
+  },
+  "heads": [
+    {
+      "name": "membrane",
+      "n_labels": 1,
+      "bits": 1,
+      "offset": 1,
+      "activation": "sigmoid",
+      "depth": 1,
+      "resampler": "max pool",
+      "labeller": "multiclass labels"
+    },
+    {
+      "name": "mask",
+      "n_labels": 1,
+      "bits": 1,
+      "offset": 0,
+      "activation": "sigmoid",
+      "depth": 0,
+      "resampler": "max pool",
+      "labeller": "multiclass labels"
+    },
+    {
+      "name": "distance",
+      "n_labels": 1,
+      "bits": 6,
+      "offset": 2,
+      "activation": "relu",
+      "depth": 0,
+      "resampler": "min pool",
+      "labeller": "linear labels"
+    }
+  ],
+  "data sources": [
+    {
+      "source type": "paired directories",
+      "input folders": [
+        "images"
+      ],
+      "label folders": [
+        "labels"
+      ],
+      "rotations": [],
+      "labeller": "linear labels"
+    }
+  ],
+  "training": {
+    "initial learning rate": 1e-05,
+    "optimizer": "keras.optimizers.Adam",
+    "loss function": {
+      "membrane": "unetsl.model.sorensenDiceCoefLoss",
+      "mask": "unetsl.model.sorensenDiceCoefLoss",
+      "distance": "keras.losses.mean_squared_error"
+    },
+    "stride": [
+      0,
+      21,
+      21,
+      21
+    ],
+    "batch size": 1,
+    "multi-gpu": false,
+    "data sources": [],
+    "samples to predict": [],
+    "normalize samples": false,
+    "validation fraction": 0.03125,
+    "epochs": 2000,
+    "loss weights": {
+      "membrane": 1.0,
+      "mask": 1.0,
+      "distance": 1.0
+    }
+  }
+}
