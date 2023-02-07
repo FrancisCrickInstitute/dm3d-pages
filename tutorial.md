@@ -134,7 +134,7 @@ Selected the "Max Gradient" energy, and **adjust the image weight**.
 - image weight: 0.0001
 - beta: 0.1
 
-![prepared for dna deforming](tutorial-images/pred-deformm-dna.png)
+![prepared for dna deforming](tutorial-images/pred-deform-dna.png)
 
 Then click deform mesh. This should deform to the nuclei. Again use
 the "remesh connections" button, and "deform" again to refine the shape
