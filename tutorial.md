@@ -12,7 +12,7 @@ here [tutorial-data.zip] (https://zenodo.org/record/7544194/files/tutorial-data.
 
 
 
-## Open an image file
+## Open an image file.
 
 The tutorial assumes that DM3D is already installed into Fiji. Indications on how to install the plugin are given in the "Supplement" section below.
 
@@ -111,7 +111,7 @@ To improve the mesh quality, click the "connection remesh" button, which will re
 
 *Applying a gaussian blur to the original image can help deforming meshes.*
 
-## Segmenting nuclei using original image data
+## Segmenting nuclei using original image data.
 
 ### Initialize a mesh.
 
@@ -124,7 +124,7 @@ The shapes of nuclei should be a bit easier to capture with spheres than the mem
 
 ![initializing nuclei](tutorial-images/initializing-dna.png)
 
-### Deform the mesh
+### Deform the mesh.
 
 Selected the "Max Gradient" energy, and **adjust the image weight**.
 
@@ -197,7 +197,7 @@ then check the "show meshes" checkbox.
 *Please note that the distance transform tends to make meshes a little large, which is
 helpful for subsequently deforming the meshes to the original data.*
 
-### Processing all frames
+### Processing all frames.
 
 To process all 6 frames past the following javascript script.
 
@@ -215,7 +215,7 @@ deform them to the distance transform.
 **This will process the first frame but it should not create any new meshes.**
 
 
-## Tracking meshes
+## Tracking meshes.
 
 ### Autotrack available meshes.
 
@@ -277,7 +277,7 @@ tabs open.
 Here is a comparison of the nuclei meshes and the meshes after deforming to
 the membrane distance transform. The montage was created using tools->record snapshots then using ImageJ.
 
-## Manually Scuplting a Mesh.
+## Manually scuplting a mesh.
 
 If a mesh is not deforming to the desired shape, it may be necessary to modify it manually. 
 To do this, first select the mesh that you want to sculpt and click the "select" button. This will activate the mesh modifier. 
@@ -299,7 +299,7 @@ You can also view/edit in 3D, click "show plane" button and check the
 Spheres will indicate the mesh is moving, but the changes will not appear
 until the mouse is released.
 
-#### Caveats
+#### Caveats.
 
 - Only nodes are sculpted, not lines or triangles.
 - When the mouse is pressed, any nodes within the sphere will not be moved.
@@ -322,7 +322,7 @@ and train a model.
 To do so, create a folder somewhere, and save the file [example-d3.json](example-d3.json)
 to the folder. **Please note that the name matters.**.
 
-### Create training data
+### Create training data.
 
 First select the image that is going to be the input image. In the
 menu "file", "select open image" and choose "tile_3-sample.tif".
@@ -337,7 +337,7 @@ Then select the training folder that the config file was saved in. Two
 additional folder will be created with the "images", "labels". Inside 
 of the folders there will be six tif files; one for each time point.
 
-### Create a model
+### Create a model.
 
 Next one needs to create the model. Activate a python environment with
 [ActiveUnetSegmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation)
@@ -361,22 +361,22 @@ at the start of training, and updated at end of each epoch.
 
 When an epoch finishes a new file "example-d3-latest.h5" will be created.
 
-### Continuing Training
+### Continuing training.
 
 To restart or continue training from a save model, name the model the
-same as the .json file. with .h5 instead.
+same as the .json file. with .h5 instead:
 
     mv example-3-latest.h5 example-d3.h5
     
-That will overwrite the previous example-3.h5, and then 
+That will overwrite the previous example-3.h5. Then executing the command: 
 
     cerberus train -c example-d3.json 
 
-Will start training from the previously trained model.
+will start training from the previously trained model.
 
-### Making a prediction
+### Making a prediction.
 
-To make a prediction
+To make a prediction, use the following command:
 
     cerberus predict example-3-latest.h5 tile_3-sample.tif
 
