@@ -100,11 +100,9 @@ Click the "deform" button. The shape will quickly settle to a shape that should
 capture the membrane well. Click the "stop!" button when the shape has relaxed acceptably since the deformation does not stop
 automatically.
 
-After deforming it is good to remesh to improve the distribution of triangles.
+After deforming it is good to remesh to improve the distribution of triangles, as follows.
 Below the "connection remesh" button, you'll find two values. Set the min 
-length to 0.01, and the max length to 0.02.
-
-To improve the mesh quality, click the "connection remesh" button, which will redo the mesh to ensure that the triangles are more uniformly distributed.  After the remeshing is complete, click the "deform" button to initiate mesh deformation. Once the mesh has settled and is capturing the membrane adequately, click the "stop" button again to halt the deformation process.
+length to 0.01, and the max length to 0.02. Click the "connection remesh" button, which will redo the mesh to ensure that the triangles are more uniformly distributed.  After the remeshing is complete, click the "deform" button to initiate mesh deformation. Once the mesh has settled and is capturing the membrane adequately, click the "stop" button again to halt the deformation process.
 
 ![finished deforming](tutorial-images/finished-deforming.png)
 
