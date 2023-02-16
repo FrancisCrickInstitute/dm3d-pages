@@ -27,7 +27,7 @@ together with a binarized version of the cross section.
 
 ![default display](tutorial-images/starting.png)
 
-One can then resize the display and zoom in on the slice view.
+One can then resize the display and zoom in on the slice view, as can be seen below.
 
 ![display resized](tutorial-images/starting-resized.png)
 
