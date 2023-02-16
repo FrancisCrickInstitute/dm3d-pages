@@ -1,56 +1,60 @@
 # DM3D tutorial
 
-This guide starts with a two channel sample image and demonstrates how
-to segment and track the meshes. It assumes that you have installed
-the dm3d into fiji, if not check 
+This guide provides instructions for segmenting and tracking segmentation meshes for nuclei and membrane using the DM3D segmentation plugin, starting from a two-channel sample image. 
 
-## Open a file
+The sections "Segmenting the membrane using original image data" and " Segmenting nuclei using original image data" describes how to obtain segmentation meshes from raw data using active meshes. The sections "Segmenting nuclei using the neural-network predicted distance transform" and 'Creating membrane meshes from nuclei meshes" describe how to obtain segmentation meshes from neural network predictions. This is more efficient, but requires neural network training from ground truth data. The section "Training a neural network" provides guidance on how to generate training data from segmentation meshes and use them to train a neural network. Thus, segmentation meshes and neural network training and prediction can be run iteratively to speed up the segmentation process.
+
+The section "Tracking meshes" explains how to track segmentation meshes in subsequent frames using the DM3D plugin. The section "Manually Scuplting a Mesh" describes DM3D tools which can be used to manually correct meshes.
+
+
 The example data is a zip file containing three images available 
-here [tutorial-data.zip](https://zenodo.org/record/7544194/files/tutorial-data.zip?download=1)
-
-Start fiji and open the provided image file: "tile_3-sample.tif". Once 
-the image has loaded you can start the DM3D plugin from the plugin
-menu. After which the DM3D interface will start and a dialog will come 
-asking you to select a  channel. Select channel 1.
+here [tutorial-data.zip] (https://zenodo.org/record/7544194/files/tutorial-data.zip?download=1). The three images correspond to original image data with a nuclear and membrane label (tile_3.sample.tif; membrane corresponds to the first label or nucleus to the second label), a neural network prediction for nuclei (pred-dna-350nm-tile_3-sample.tif) and a neural network prediction for membranes (pred-membrane-350nm-tile_3-sample.tif). The neural network predictions have three channels, corresponding to predicted borders (outlines of cells and membrane), mask and distance transform. 
 
 
-## Segmenting the membrane. 
+
+## Open an image file
+
+The tutorial assumes that DM3D is already installed into Fiji. Indications on how to install the plugin are given in the "Supplement" section below.
+
+To use the DM3D plugin, start Fiji and open the provided image file "tile_3-sample.tif". Once the image has loaded, access the plugin menu and select the DM3D plugin to launch the interface. A dialog will appear, prompting you to select a channel. Choose channel 1 to proceed with the segmentation.
 
 
-After selecting the channel, the image is loaded. Nothing changes in
-the 3D canvas. On the main control panel, the name of the image should
-appear on the top right. The view on the left will show a cross section
-of the image, and a binarized version of the cross section to the 
-right.
+## Segmenting the membrane using original image data. 
+
+Once the channel is selected, the corresponding image will load, and the 3D canvas will remain unchanged.
+The name of the image should appear on the top right of the main control panel. 
+On the left side of the panel, a cross-sectional view of the image will be displayed, 
+together with a binarized version of the cross section, on the right of the left panel.
 
 ![default display](tutorial-images/starting.png)
 
-I resize the display and zoom in on the slice view.
+One can then resize the display and zoom in on the slice view.
 
 ![display resized](tutorial-images/starting-resized.png)
 
 
 ### Initialize meshes.
 
-The goal is to add spheres until they represent the target cell enough
-to initialize a mesh that will deform to the original image data to
-produce an acceptable segmentation.
 
+To initialize a mesh click the button "initialize mesh..."; this will
+open a new tab with three orthogonal views of the 3D image.
 
-To initialize a mesh click the button "initialize mesh..." this will
-open a new tab with three orthoganal views of the 3D image.
+The aim is to add spheres until they adequately represent the target cell, thereby allowing 
+for the initialization of a mesh that can be deformed to match the original 
+image data and produce an accurate segmentation.
+
 
 ![intializer default](tutorial-images/initializer-default.png)
 
 The white lines in the image indicate the position of the other two
 views. The slider to the right adjust the position of the view along 
-the third axis. I zoom by scrolling over the different views to see
-the images better.
+the third axis. To see
+the images better, one can zoom by scrolling over the different views.
 
 ![initializer prepared](tutorial-images/initializer-prepared.png)
 
 Using the top left initializer, adjust the slider until the image has a 
-cell of interest in view preferably where the crossection is largets.
+cell of interest in view, preferably where the cell cross-section is large.
 
 Click near the center of the cross section and a sphere will start to 
 be added. Move the cursor to the edge of the cell and click again. That 
@@ -58,10 +62,9 @@ will create a sphere which will be used to initialize a mesh.
 
 ![one sphere](tutorial-images/one-sphere.png)
 
-Once the sphere has been created it can be modified with the two colored
+Once the sphere has been created it can be modified using the two colored
 circles. Dragging the yellow circle will move the sphere and dragging the
-blue circle will change the radius.
-
+blue circle will change its radius.
 
 The figure shows the collection of spheres in the 3 views. 
 
@@ -72,14 +75,14 @@ the spheres will change into a new mesh.
 
 ![rough mesh](tutorial-images/rough-mesh.png)
 
-### Deform mesh.
+### Deform segmentation meshes.
 
 Go back to the main tab to prepare the interface for deforming the 
-initialized mesh to the image. (Do not close the initialization tab
-just select the main tab.)
+initialized mesh to the image. Do not close the initialization tab,
+just select the main tab.
 
 Select the "Max Intensity" image energy. This will attract meshes
-to bright regions. The parameters should be set as follows
+to bright regions. The parameters should be set as follows:
 
 - gamma: 500
 - alpha: 1.0
@@ -88,40 +91,38 @@ to bright regions. The parameters should be set as follows
 - image weight: 0.01
 - beta: 0.1
 
-![prepared for deforming](tutorial-images/pre-deform.png)
+![prepared for deformation](tutorial-images/pre-deform.png)
 
-*I have made the surface of the mesh visible in the 3D canvas by pressing 'o', 
-and I have adjusted the position of the "furrow plane" with the controls
+*The surface of the mesh is made visible in the 3D canvas by pressing 'o', 
+and the position of the "furrow plane" is adjusted with the controls
 on the right side of the panel.*
 
-Click deform. The shape will quickly settle to a shape that should
-capture the membrane well. Click stop! The deformation does not stop
+Click the "deform" button. The shape will quickly settle to a shape that should
+capture the membrane well. Click the "stop!" button when the shape has relaxed acceptably since the deformation does not stop
 automatically.
 
-After deforming it is good to remesh to improve the triangle distribution.
-Below "connection remesh" button there are two values. Set the min 
-lenth to 0.01 and the max length to 0.02.
+After deforming it is good to remesh to improve the distribution of triangles.
+Below the "connection remesh" button, you'll find two values. Set the min 
+length to 0.01, and the max length to 0.02.
 
-Click the "connection remesh" button. That will redo the mesh so that the triangles 
-are more uniform. Then click deform and when the mesh stops deforming
-click stop again.
+To improve the mesh quality, click the "connection remesh" button, which will redo the mesh to ensure that the triangles are more uniformly distributed.  After the remeshing is complete, click the "deform" button to initiate mesh deformation. Once the mesh has settled and is capturing the membrane adequately, click the "stop" button again to halt the deformation process.
 
 ![finished deforming](tutorial-images/finished-deforming.png)
 
-*Applying a gaussian blur to thoriginal image can help deformations.*
+*Applying a gaussian blur to the original image can help deforming meshes.*
 
-## Segmenting a nucleus
+## Segmenting nuclei using original image data
 
 ### Initialize a mesh.
 
-Change the channel to the second channel, the dna channel.
+Change the channel to the second channel, corresponding to the nuclear label.
 Click on the initialize mesh button. A second initialization tab will
 open. 
 
-Again add spheres to the create a representation of the desired shape,
-the dna shapes should be a bit easier to capture with spheres.
+Again add spheres to create a representation of the desired shape.
+The shapes of nuclei should be a bit easier to capture with spheres than the membrane shapes.
 
-![initializing dna](tutorial-images/initializing-dna.png)
+![initializing nuclei](tutorial-images/initializing-dna.png)
 
 ### Deform the mesh
 
@@ -134,43 +135,41 @@ Selected the "Max Gradient" energy, and **adjust the image weight**.
 - image weight: 0.0001
 - beta: 0.1
 
-![prepared for dna deforming](tutorial-images/pred-deform-dna.png)
+![prepared for nuclei deformation](tutorial-images/pred-deform-dna.png)
 
-Then click deform mesh. This should deform to the nuclei. Again use
-the "remesh connections" button, and "deform" again to refine the shape
-of the mesh until it is not improving any more.
+Next, click the "deform mesh" button to deform the mesh to fit the nuclei. After that, click the "remesh connections" button again to refine the mesh's triangles and ensure a more uniform distribution. Repeat the "deform" and "remesh connections" steps until the mesh has converged and further refinement doesn't improve the segmentation.
 
-![before after dna deformations](tutorial-images/deformed-dna.png)
+![before and after nuclei deformations](tutorial-images/deformed-dna.png)
 
 *The 3D canvas display has been updated by clicking the "show plane"
 button and checking the "textured" checkbox.*
 
-## Using the distance transform.
+## Segmenting nuclei using the neural-network predicted distance transform.
+
+The pipeline uses a neural network to obtain a predicted distance transform. We now describe below how to use the predicted distance transform to obtain segmentation meshes.
 
 ### Automatically detecting nuclei.
 
 First open the image provided in the tutorial dataset, 
-"pred-dna-350nm-tile_3-sample.tif".and select channel 3. That is 
-the distance transform. Go to the file menu and select "restart meshes"
+"pred-dna-350nm-tile_3-sample.tif, and select channel 3. This channel corresponds to 
+the distance transform prediction of the neural network. Go to the file menu and select "restart meshes".
 
 To detect nuclei, go to the "tools" menu and start the javascript console.
-Type in the command.
+Type in the following command:
 
     controls.guessMeshes( 3 );
 
 Then click the button "eval".
 
-![after guessing dna from distance transform](tutorial-images/guessed-meshes.png)
+![after guessing nuclei from distance transform](tutorial-images/guessed-meshes.png)
 
-The value "3" is a threshold value. A small number will predict larger
-meshes, but sometimes they can be merged. A large number will predict
-smaller meshes. On the control panel, clicking on the histogram 
-can help to show how well the threshold value works.
+The threshold value, set to "3" by default, determines which threshold of the distance transform value is used to automatically initialise meshes. A smaller value off threshold may result in larger meshes, but which  can potentially merge between different nuclei. A larger value on the other hand may result in two small meshes. The histogram on the control panel can be clicked to evaluate the effect of possible threshold values; visible in the right part of the left panel.
+
 
 ### Deforming meshes to the distance transform.
 
-To deform to the distance tranform select a "Max Intensity" and 
-set the image weight to a negative number. 
+To then deform segmentation meshes to the distance tranform, select "Max Intensity" in the "external energy" menu, and 
+set the image weight to a negative number. A possible set of parameters is as follows: 
 
 - gamma: 500
 - alpha: 1.0
@@ -183,10 +182,10 @@ Then deform all meshes by holding down Control and clicking deform. After
 the meshes have deformed and stopped changing significantly, click on 
 "stop!".
 
-That will refine the shapes, to further improve the meshes. Hold down
-control and click "connection remesh" and click deform again. 
+To further improve the meshes, hold down
+control, click "connection remesh" and click deform again. 
 
-![deformed itnialized meshes](tutorial-images/guessed-deformed.png)
+![deformed initalized meshes](tutorial-images/guessed-deformed.png)
 
 The quality of the segmentations can be verified by using the initializer
 window. Sometimes the meshes will be out of sync with what is in 
@@ -195,8 +194,8 @@ then check the "show meshes" checkbox.
 
 ![initializer view](tutorial-images/initializer-view-dna.png)
 
-*The distance transform tends to make meshes a little large, which is
-good for subsequently deforming the meshes to the original data.*
+*Please note that the distance transform tends to make meshes a little large, which is
+helpful for subsequently deforming the meshes to the original data.*
 
 ### Processing all frames
 
@@ -210,10 +209,10 @@ To process all 6 frames past the following javascript script.
         controls.deformAllMeshes(100);
     }
     
-Click eval. That will go through all 6 frames, guess the meshes, and 
-deform them.
+Click eval. That will go through all 6 frames, guess segmentation meshes, and 
+deform them to the distance transform.
 
-**This will process the first frame but it shouldn't create any new meshes.**
+**This will process the first frame but it should not create any new meshes.**
 
 
 ## Tracking meshes
@@ -222,14 +221,14 @@ deform them.
 
 In the "tools" menu select "Manage Tracks". That will start a new tab
 to manage the tracks. Tracks can be linked automatically. In the 
-javascript console run.
+javascript console run the following commands:
 
     controls.toFrame(0);
     controls.autotrackAvailableTracks();
 
-This can be run from any frame and it tries to find meshes in the next frame.
+This can be run from any frame (changing the value 0 above to the frame number of interest) and will aim at connecting meshes from the current frame to the next frame.
 
-To do all of the frames.
+To do all of the frames in the example data, run the following command:
 
     for(i = 0; i<5; i++){
         controls.toFrame(i);
@@ -240,13 +239,12 @@ This successfully tracks all of the meshes in this example.
 
 ![track manager after linking tracks](tutorial-images/linked-tracks.png)
 
-## Creating membrane meshes from DNA meshes.
+## Creating membrane meshes from nuclei meshes.
 
-Once the nuclear meshes are tracked. Open the image. 
-"pred-membrane-350nm-tile_3-sample.tif" and select channel 3 again.
+Once the nuclear meshes are tracked, open the image 
+"pred-membrane-350nm-tile_3-sample.tif" and select channel 3 as before. This will open the predicted distance transform by the neural network, but now for cell membranes.
 
-This involves the same method for the dna but we're starting from 
-the dna meshes and deforming them to the distance transform.
+To segment the membrane using the nuclear meshes as a starting point, we apply the same method but deform the meshes to the distance transform. The following parameter values can be used:
 
 - gamma: 500
 - alpha: 1.0
@@ -255,10 +253,9 @@ the dna meshes and deforming them to the distance transform.
 - image weight: -0.1
 - beta: 0.1
 
-Then hold control and click "deform". After meshes have slowed down, 
-click "stop!" and "connection remesh" and start deforming again.
+To deform the meshes, hold down the control key and click "deform". Once the meshes have settled to a good shape, click "stop!" and "connection remesh". Finally, click "deform" again to refine the segmentation.
 
-Since this is iterative, I script it. Then go through and find problems.
+Since this process is iterative, it is helpful to write a script which can be executed in the javascript console:
 
     for( i = 0; i<6; i++){
         controls.toFrame(i);
@@ -270,29 +267,21 @@ Since this is iterative, I script it. Then go through and find problems.
         controls.reMeshConnectionsAllMeshes(0.01, 0.02);
         controls.deformAllMeshes(100);
     }
-
-![montage of dna and membrane meshes](tutorial-images/dna-membrane-meshes.png)
-
-Here is a comparison of the DNA meshes and the meshes after deforming to
-the membrane distance transform.
-
-The montage was created using tools->record snapshots then using imagej.
-
-It is important to use the original data for verifying the quality of the
+    
+Once this automatic process is executed, one can verify the outcome by eye by going through the frames. It is important to use the original data for verifying the quality of the
 meshes. That is why it is convenient to have multiple initialization 
 tabs open.
+ 
+![montage of nuclei and membrane meshes](tutorial-images/dna-membrane-meshes.png)
+
+Here is a comparison of the nuclei meshes and the meshes after deforming to
+the membrane distance transform. The montage was created using tools->record snapshots then using ImageJ.
 
 ## Manually Scuplting a Mesh.
 
-Sometimes a mesh isn't deforming to the shape you want. Maybe it is 
-stuck on something, maybe there is an artifact. This is a way to
-modify the mesh manually.
-
-Select the mesh you want sculpt. Click on the "select" button. That 
-activates the mesh modifier. Then click on "sculpt" that starts scuplt
-mode. Move the mouse over the slice view and a circle (sphere) will move
-around. By clicking and dragging the circle to intersect nodes of the mesh
-they will be moved around. "scuplted" if you will.
+If a mesh is not deforming to the desired shape, it may be necessary to modify it manually. 
+To do this, first select the mesh that you want to sculpt and click the "select" button. This will activate the mesh modifier. 
+Then, click on "sculpt" to enter sculpt mode. Then, click on "sculpt" to enter sculpt mode. In this mode, you can move the mouse over the slice view, and a circle (sphere) will appear that you can move around by clicking and dragging. By positioning the circle over nodes of the mesh and dragging, you can sculpt the mesh by moving its nodes to new positions.
 
 ![editing a mesh from 2d plane view](images/sculpting-2d.png)
 
@@ -307,14 +296,14 @@ You can also view/edit in 3D, click "show plane" button and check the
 
 ![editing a mesh from 3d view](images/sculpting-3d.png)
 
-Spheres will indicate the mesh is moving, but the changes won't appear
+Spheres will indicate the mesh is moving, but the changes will not appear
 until the mouse is released.
 
 #### Caveats
 
-- Only nodes are sculpted, not lines or triangles so the results may vary.
+- Only nodes are sculpted, not lines or triangles.
 - When the mouse is pressed, any nodes within the sphere will not be moved.
-  Only nodes that start outside.
+  Only nodes that start outside the sphere will be move.
 - When "select" is pressed you can restrict the nodes that will be
   modified by moving the sphere over them and clicking. Clicking more
   will accumulate more selected nodes. Only the selected nodes can 
@@ -324,17 +313,18 @@ until the mouse is released.
 ## Training a neural network.
 
 **Requires a cuda enabled graphics card.**
+
 To run the neural network, [ActiveUnetSegmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation) needs to be installed.
 
-Once we have a set of meshes that look good we can create training data 
+Once a set of segmentation meshes are obtained and are acceptable, it can be used to create training data 
 and train a model.
 
-Create a folder somewhere, and save the file [example-d3.json](example-d3.json)
-to the folder. **the name matters**.
+To do so, create a folder somewhere, and save the file [example-d3.json](example-d3.json)
+to the folder. **Please note that the name matters.**.
 
 ### Create training data
 
-First select the image that you want to be your input image. In the
+First select the image that is going to be the input image. In the
 menu "file", "select open image" and choose "tile_3-sample.tif".
 
 It will use the original ImagePlus to derive the
@@ -345,11 +335,11 @@ the following function in the javascript console.
     
 Then select the training folder that the config file was saved in. Two 
 additional folder will be created with the "images", "labels". Inside 
-of the folders there will be six tif files. One for each time point.
+of the folders there will be six tif files; one for each time point.
 
 ### Create a model
 
-Next we need to create the model. Activate a python environment with
+Next one needs to create the model. Activate a python environment with
 [ActiveUnetSegmentation](https://github.com/FrancisCrickInstitute/ActiveUnetSegmentation)
 installed.
 
@@ -369,7 +359,7 @@ created. It gets updated at the end of each batch for the first 5000
 batches. A file "training-log_example-d3-0123456789ab.txt" will be created 
 at the start of training, and updated at end of each epoch. 
 
-When an epoch finishes a new file "example-d3-latest.h5" will be created
+When an epoch finishes a new file "example-d3-latest.h5" will be created.
 
 ### Continuing Training
 
@@ -390,11 +380,11 @@ To make a prediction
 
     cerberus predict example-3-latest.h5 tile_3-sample.tif
 
-I use the default options and the output, pred-example-3-latest-tile_3-sample.tif, 
+Using the default options, the output, pred-example-3-latest-tile_3-sample.tif, 
 looks decent after a couple of epochs. 
 
-*Making a prediction from the training data doesn't show the quality of
-the model, it is more a demonstration that things are working.*
+*Making a prediction from the training data does not demonstrate the quality of
+the model, it is rather a demonstration that things are working.*
 
 ### Additional Models
 
@@ -409,28 +399,24 @@ data they have been trained on.
 ### Adding DM3D to fiji.
 
 - Start Fiji and got to the help menu.
-- From the help menu select update. Fiji will check for updates
-- Click the button that says "manage update sites"
-- The name doesn't matter, double click on the name to change it to "DM3D"
-- Double click on the URL field and change it to: https://sites.imagej.net/Odinsbane/
-- Update Fiji
+- From the help menu select update. Fiji will check for updates.
+- Click the button that says "manage update sites".
+- The name does matter, double click on the name to change it to "DM3D"
+- Double click on the URL field and change it to: https://sites.imagej.net/Odinsbane/.
+- Update Fiji.
 
 ### Improving deforming meshes.
 
-When meshes deform poorly.
+When meshes deform poorly:
 
 - adjust parameters.
 - re-initialize the mesh to be a better guess.
 - filter the original image.
-- Manually edit mesh.
+- Manually edit meshes.
 
 ### Notes
 
-These parameters were found by guessing and checking. Once the mesh
-is initialized I click deform. Then depending on how the mesh deforms
-I adjust some parameters and try to get it to deform better.
-
-If the mesh deforms very poorly I use undo.
+The parameters provided for mesh updating are the result of trial and error. To test for these parameters, one can click on "deform" after initializing the mesh, and depending on the results, adjust some of the parameters to achieve better deformation. In case the mesh deforms very poorly, the 'undo' function can be used to revert to the previous state.
 
 
 ### Troubleshooting
