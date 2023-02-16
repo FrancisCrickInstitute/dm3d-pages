@@ -65,7 +65,7 @@ Once the sphere has been created it can be modified using the two colored
 circles. Dragging the yellow circle will move the sphere and dragging the
 blue circle will change its radius.
 
-The figure shows the collection of spheres in the 3 views. 
+Additional spheres can be added to create a more complex shape. The spheres should overlap with each other to subsequently create a single mesh. The figure shows the collection of spheres in the 3 views. 
 
 ![collection of spheres](tutorial-images/many-spheres.png)
 
