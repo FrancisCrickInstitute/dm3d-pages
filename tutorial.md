@@ -149,7 +149,7 @@ The pipeline uses a neural network to obtain a predicted distance transform. We 
 
 First open the image provided in the tutorial dataset, 
 "pred-dna-350nm-tile_3-sample.tif, and select channel 3. This channel corresponds to 
-the distance transform prediction of the neural network, for nuclei. Go to the file menu and select "restart meshes".
+the distance transform prediction of the neural network, for nuclei. Go to the file menu and select "Start new meshes".
 
 To detect nuclei, go to the "tools" menu and start the javascript console.
 Type in the following command:
