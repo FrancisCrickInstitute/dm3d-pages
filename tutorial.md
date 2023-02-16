@@ -23,7 +23,7 @@ To use the DM3D plugin, start Fiji and open the provided image file "tile_3-samp
 Once the channel is selected, the corresponding image will load, and the 3D canvas will remain unchanged. Pressing "H" in the 3D canvas will display a list of shortcuts.
 The name of the image should appear on the top right of the main control panel. 
 On the left side of the panel, a cross-sectional view of the image will be displayed, 
-together with a binarized version of the cross section, on the right of the left panel.
+together with a binarized version of the cross section. 
 
 ![default display](tutorial-images/starting.png)
 
