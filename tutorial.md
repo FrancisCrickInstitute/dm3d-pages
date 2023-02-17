@@ -132,7 +132,7 @@ Selected the "Max Gradient" energy, and **adjust the image weight**.
 - image weight: 0.0001
 - beta: 0.1
 
-![prepared for nuclei deformation](tutorial-images/pred-deform-dna.png)
+![prepared for nuclei deformation](tutorial-images/pre-deform-dna.png)
 
 Next, click the "deform mesh" button to deform the mesh to fit the nuclei. After that, click the "remesh connections" button again to refine the mesh's triangles and ensure a more uniform distribution. Repeat the "deform" and "remesh connections" steps until the mesh has converged and further refinement doesn't improve the segmentation.
 
