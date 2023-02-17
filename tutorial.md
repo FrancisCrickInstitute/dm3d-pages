@@ -185,9 +185,7 @@ control, click "connection remesh" and click deform again.
 ![deformed initalized meshes](tutorial-images/guessed-deformed.png)
 
 The quality of the segmentations can be verified by using the initializer
-window. Sometimes the meshes will be out of sync with what is in 
-the initializer window and it can be helpful to run. To uncheck and
-then check the "show meshes" checkbox.
+window. Sometimes the initializer window is not up to date with the most recent changes ot meshes, and it can be helpful to toggle the "show meshes" checkbox in order to update the display.
 
 ![initializer view](tutorial-images/initializer-view-dna.png)
 
