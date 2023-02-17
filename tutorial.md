@@ -8,7 +8,7 @@ The section "Tracking meshes" explains how to track segmentation meshes in subse
 
 
 The example data is a zip file containing three images available 
-here [tutorial-data.zip] (https://zenodo.org/record/7544194/files/tutorial-data.zip?download=1). The three images correspond to original image data with a nuclear and membrane label (tile_3.sample.tif; membrane corresponds to the first label or nucleus to the second label), a neural network prediction for nuclei (pred-dna-350nm-tile_3-sample.tif) and a neural network prediction for membranes (pred-membrane-350nm-tile_3-sample.tif). The neural network predictions have three channels, corresponding to predicted borders (outlines of cells and membrane), mask and distance transform. 
+here [tutorial-data.zip](https://zenodo.org/record/7544194/files/tutorial-data.zip?download=1). The three images correspond to original image data with a nuclear and membrane label (tile_3.sample.tif; membrane corresponds to the first label or nucleus to the second label), a neural network prediction for nuclei (pred-dna-350nm-tile_3-sample.tif) and a neural network prediction for membranes (pred-membrane-350nm-tile_3-sample.tif). The neural network predictions have three channels, corresponding to predicted borders (outlines of cells and membrane), mask and distance transform. 
 
 
 ## Open an image file.
